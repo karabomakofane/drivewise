@@ -86,7 +86,7 @@
 .sign-card p  { font-size: .78rem; color: var(--muted); }
 
 /* =============================================
-   RULES & ACCORDION
+   RULES ACCORDION
    ============================================= */
 .rules-page-section { padding: 3rem 0 4rem; }
 .rules-accordion { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 3rem; }
@@ -98,17 +98,17 @@
   width: 100%; background: none; color: var(--text);
   display: flex; align-items: center; justify-content: space-between;
   padding: 1rem 1.25rem; font-size: 1rem; font-weight: 500;
-  text-align: left; transition: background .15s;
+  text-align: left; transition: background .15s; cursor: pointer;
 }
 .acc-header:hover { background: var(--bg3); }
 .acc-header.open  { color: var(--accent); }
-.acc-icon { font-size: 1.2rem; transition: transform .2s; }
+.acc-icon { font-size: 1.2rem; transition: transform .2s; flex-shrink: 0; }
 .acc-header.open .acc-icon { transform: rotate(45deg); }
 .acc-body {
   max-height: 0; overflow: hidden;
   transition: max-height .3s ease; padding: 0 1.25rem;
 }
-.acc-body.open { max-height: 300px; padding: 0 1.25rem 1.25rem; }
+.acc-body.open { max-height: 400px; padding: 0 1.25rem 1.25rem; }
 .acc-body p { font-size: .88rem; color: var(--muted); line-height: 1.7; }
 
 /* =============================================
@@ -123,7 +123,7 @@
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--r2); padding: 1.25rem; text-align: center;
 }
-.mspsl-icon  { font-size: 2rem; margin-bottom: .5rem; }
+.mspsl-icon   { font-size: 2rem; margin-bottom: .5rem; }
 .mspsl-letter {
   font-family: var(--font-head); font-size: 2rem;
   font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: .3rem;
