@@ -115,8 +115,7 @@
   user-select: none; transition: all .15s;
 }
 .touch-btn:active {
-  background: var(--bg3);
-  border-color: var(--accent);
+  background: var(--bg3); border-color: var(--accent);
   transform: scale(.93);
 }
 
@@ -698,4 +697,32 @@
   width: 26px; height: 26px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-head); font-size: .75rem; font-weight: 800;
+}
+
+/* =============================================
+   BOSS WAVE STYLES
+   Pulsing red border on canvas during boss wave
+   ============================================= */
+#gameCanvas.boss-active {
+  border-color: #c0392b;
+  box-shadow: 0 0 0 3px rgba(192,57,43,.4),
+              0 0 20px rgba(192,57,43,.2);
+  animation: bossGlow 1s ease-in-out infinite alternate;
+}
+@keyframes bossGlow {
+  from { box-shadow: 0 0 0 3px rgba(192,57,43,.4), 0 0 20px rgba(192,57,43,.2); }
+  to   { box-shadow: 0 0 0 6px rgba(192,57,43,.6), 0 0 40px rgba(192,57,43,.4); }
+}
+
+/* =============================================
+   FACT CARD ANIMATION
+   The canvas-drawn fact card handles its own
+   positioning — this class toggles the canvas
+   border glow on correct reactions
+   ============================================= */
+#gameCanvas.correct-flash {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(63,185,80,.4),
+              0 0 20px rgba(63,185,80,.15);
+  transition: border-color .3s, box-shadow .3s;
 }

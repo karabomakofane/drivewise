@@ -20,7 +20,7 @@
    ============================================= */
 function startGame() {
 
-  /* Reset game state object */
+  /* Reset full game state */
   Object.assign(G, {
     running:       true,
     score:         0,
@@ -41,13 +41,28 @@ function startGame() {
     envTransition: 0,
     transitioning: false,
     nextEnvIndex:  0,
+    /* boss wave */
+    isBossWave:    false,
+    bossWaveCount: 0,
+    /* warning flash */
+    warnSign:      null,
+    warnAlpha:     0,
+    warnTimer:     0,
+    /* fact card */
+    factText:      '',
+    factAlpha:     0,
+    factTimer:     0,
+    /* screen flash */
+    flashColor:    '',
+    flashAlpha:    0,
   });
 
   /* Clear all live arrays */
-  OBS     = [];
-  PARTS   = [];
-  SCENERY = [];
-  RAIN    = [];
+  OBS      = [];
+  PARTS    = [];
+  CONFETTI = [];
+  SCENERY  = [];
+  RAIN     = [];
 
   /* Reset player */
   P.lane    = 1;
@@ -55,12 +70,16 @@ function startGame() {
   P.braking = false;
 
   /* Reset HUD displays */
-  document.getElementById('start-btn').disabled               = true;
-  document.getElementById('score-display').textContent        = '0';
-  document.getElementById('streak-display').textContent       = '0';
-  document.getElementById('level-display').textContent        = '1';
-  document.getElementById('react-display').textContent        = '—';
-  document.getElementById('mistakes-display').textContent     = '0';
+  document.getElementById('start-btn').disabled           = true;
+  document.getElementById('score-display').textContent    = '0';
+  document.getElementById('streak-display').textContent   = '0';
+  document.getElementById('level-display').textContent    = '1';
+  document.getElementById('react-display').textContent    = '—';
+  document.getElementById('mistakes-display').textContent = '0';
+
+  /* Reset canvas border classes from previous game */
+  const cv = document.getElementById('gameCanvas');
+  cv.classList.remove('boss-active', 'correct-flash');
 
   showFB('🌳 Starting in Suburban Street — drive safely!', 'info');
 
@@ -78,6 +97,10 @@ function startGame() {
 function endGame() {
   G.running = false;
   cancelAnimationFrame(animId);
+
+  /* Remove boss glow if game ended during boss wave */
+  document.getElementById('gameCanvas').classList.remove('boss-active', 'correct-flash');
+
   document.getElementById('start-btn').disabled = false;
   showEndReport();
 }
@@ -114,7 +137,7 @@ function showEndReport() {
    OVERLAY ACTIONS
    ============================================= */
 
-/* Route from end report to AI coach */
+/* Route from end report to crash quiz */
 function goToQuiz() {
   document.getElementById('end-overlay').classList.remove('show');
   buildQuiz();
@@ -147,6 +170,13 @@ function showFB(msg, type) {
   const bar       = document.getElementById('feedback-bar');
   bar.textContent = msg;
   bar.className   = 'feedback-bar ' + type;
+
+  /* Flash canvas border green on good reactions */
+  if (type === 'good') {
+    const cv = document.getElementById('gameCanvas');
+    cv.classList.add('correct-flash');
+    setTimeout(() => cv.classList.remove('correct-flash'), 400);
+  }
 
   clearTimeout(fbTimer);
   fbTimer = setTimeout(() => {
