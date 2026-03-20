@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DriveWise Controller</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0d1117; color: #e6edf3;
+      height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      user-select: none;
+    }
+
+    /* ---- STATUS BAR ---- */
+    #status-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: #161b22; border-bottom: 1px solid #30363d;
+      padding: .6rem 1rem;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .75rem; z-index: 10;
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #e05c4b; display: inline-block;
+      margin-right: 6px; transition: background .3s;
+    }
+    .status-dot.connected { background: #3fb950; }
+    #status-text { font-size: .75rem; color: #8b949e; }
+
+    /* ---- MAIN CONTROLLER SCREEN ---- */
+    #controller-screen {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.5rem; padding: 1rem; width: 100%;
+    }
+
+    /* Tilt visualiser */
+    .tilt-ring {
+      width: 180px; height: 180px; border-radius: 50%;
+      border: 2px solid #30363d;
+      position: relative;
+      background: #161b22;
+      flex-shrink: 0;
+    }
+    .tilt-ball {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: #f5a623;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      transition: top .05s, left .05s;
+    }
+    .tilt-cross-h, .tilt-cross-v {
+      position: absolute; background: rgba(255,255,255,.08);
+    }
+    .tilt-cross-h { height: 1px; width: 100%; top: 50%; }
+    .tilt-cross-v { width: 1px;  height: 100%; left: 50%; }
+
+    /* Direction labels */
+    .tilt-labels {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      position: absolute; inset: 0;
+      font-size: .6rem; color: rgba(255,255,255,.2);
+      font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    }
+    .tl-left   { grid-area: 2/1; display:flex; align-items:center; padding-left:8px; }
+    .tl-right  { grid-area: 2/3; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
+    .tl-brake  { grid-area: 1/2; display:flex; align-items:flex-start; justify-content:center; padding-top:8px; }
+
+    /* Current action indicator */
+    .action-badge {
+      font-size: 1.4rem; font-weight: 900; letter-spacing: .06em;
+      font-family: 'Barlow Condensed', sans-serif;
+      color: #f5a623; min-height: 2rem; text-align: center;
+      text-transform: uppercase;
+    }
+    .action-badge.braking { color: #e05c4b; }
+    .action-badge.left    { color: #58a6ff; }
+    .action-badge.right   { color: #3fb950; }
+
+    /* Brake button */
+    .brake-btn {
+      width: 140px; height: 140px; border-radius: 50%;
+      background: #1a0808; border: 3px solid #e05c4b;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem; font-weight: 900;
+      letter-spacing: .1em; color: #e05c4b;
+      text-transform: uppercase; cursor: pointer;
+      transition: all .1s; -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .brake-btn:active, .brake-btn.pressed {
+      background: rgba(224,92,75,.3);
+      transform: scale(.94);
+    }
+
+    .controls-row {
+      display: flex; align-items: center; gap: 2rem;
+    }
+
+    /* Sensitivity slider */
+    .sensitivity-wrap {
+      width: 100%; max-width: 300px;
+    }
+    .sens-label {
+      font-size: .72rem; color: #8b949e; text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: .4rem;
+      display: flex; justify-content: space-between;
+    }
+    input[type=range] {
+      width: 100%; accent-color: #f5a623;
+    }
+
+    /* Crash feedback overlay */
+    #crash-overlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(224,92,75,.25);
+      display: none; align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem; font-weight: 900; color: #e05c4b;
+      text-transform: uppercase;
+    }
+    #crash-overlay.show { display: flex; }
+
+    /* Connection screen */
+    #connect-screen {
+      text-align: center; padding: 2rem;
+    }
+    #connect-screen h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.5rem; font-weight: 900;
+      color: #f5a623; text-transform: uppercase; margin-bottom: .5rem;
+    }
+    #connect-screen p { color: #8b949e; font-size: .9rem; margin-bottom: 2rem; }
+    .connect-spinner {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 3px solid #30363d; border-top-color: #f5a623;
+      animation: spin .8s linear infinite; margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Permission screen */
+    #permission-screen { text-align: center; padding: 2rem; display: none; }
+    #permission-screen h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.8rem; font-weight: 800; color: #f5a623;
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+    #permission-screen p { color: #8b949e; font-size: .85rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .perm-btn {
+      background: #f5a623; color: #0d1117;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem; font-weight: 800;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: .85rem 2.5rem; border-radius: 10px;
+      border: none; cursor: pointer;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- STATUS BAR -->
+<div id="status-bar">
+  <div>
+    <span class="status-dot" id="status-dot"></span>
+    <span id="status-text">Connecting to game…</span>
+  </div>
+  <div style="color:#8b949e;font-size:.7rem">DriveWise Controller</div>
+</div>
+
+<!-- CONNECTING SCREEN -->
+<div id="connect-screen">
+  <h1>Drive<span style="color:#e6edf3">Wise</span></h1>
+  <p>Connecting to the game…<br>Make sure you are on the same network.</p>
+  <div class="connect-spinner"></div>
+</div>
+
+<!-- PERMISSION SCREEN (iOS needs explicit gesture) -->
+<div id="permission-screen">
+  <h2>Allow Motion</h2>
+  <p>Tap the button below to allow this page to use your phone's tilt sensor for steering.</p>
+  <button class="perm-btn" onclick="requestMotionPermission()">Enable Tilt Controls</button>
+</div>
+
+<!-- MAIN CONTROLLER -->
+<div id="controller-screen" style="display:none; padding-top:50px">
+
+  <!-- Tilt ring visualiser -->
+  <div class="tilt-ring" id="tiltRing">
+    <div class="tilt-cross-h"></div>
+    <div class="tilt-cross-v"></div>
+    <div class="tilt-labels">
+      <div class="tl-brake">BRAKE</div>
+      <div class="tl-left">← LEFT</div>
+      <div class="tl-right">RIGHT →</div>
+    </div>
+    <div class="tilt-ball" id="tiltBall"></div>
+  </div>
+
+  <!-- Current action label -->
+  <div class="action-badge" id="actionBadge">Hold phone upright to steer</div>
+
+  <!-- Brake button -->
+  <div class="controls-row">
+    <button class="brake-btn" id="brakeBtn"
+      ontouchstart="sendBrake(true)"
+      ontouchend="sendBrake(false)"
+      onmousedown="sendBrake(true)"
+      onmouseup="sendBrake(false)">
+      BRAKE
+    </button>
+  </div>
+
+  <!-- Sensitivity -->
+  <div class="sensitivity-wrap">
+    <div class="sens-label">
+      <span>Steering sensitivity</span>
+      <span id="sensVal">5</span>
+    </div>
+    <input type="range" min="1" max="10" value="5" id="sensSlider"
+      oninput="document.getElementById('sensVal').textContent=this.value">
+  </div>
+
+</div>
+
+<!-- CRASH OVERLAY -->
+<div id="crash-overlay">💥 CRASH!</div>
+
+<script>
+/* =============================================
+   WEBSOCKET CONNECTION
+   ============================================= */
+let ws         = null;
+let connected  = false;
+let braking    = false;
+let lastLane   = -1; /* -1=left, 0=centre, 1=right */
+let sensitivity = 5;
+
+/* Get WebSocket URL from current page URL */
+function getWSUrl() {
+  const loc = window.location;
+  const proto = loc.protocol === 'https:' ? 'wss:' : 'ws:';
+  return `${proto}//${loc.host}`;
+}
+
+function connect() {
+  try {
+    ws = new WebSocket(getWSUrl());
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: 'identify', role: 'controller' }));
+    };
+
+    ws.onmessage = (e) => {
+      try {
+        const msg = JSON.parse(e.data);
+
+        if (msg.type === 'identified') {
+          connected = true;
+          document.getElementById('status-dot').classList.add('connected');
+          document.getElementById('status-text').textContent = 'Connected to game';
+          document.getElementById('connect-screen').style.display   = 'none';
+          /* Check if iOS needs permission request */
+          if (typeof DeviceOrientationEvent !== 'undefined' &&
+              typeof DeviceOrientationEvent.requestPermission === 'function') {
+            document.getElementById('permission-screen').style.display = 'flex';
+          } else {
+            showController();
+          }
+        }
+
+        if (msg.type === 'crash') {
+          showCrashFeedback();
+        }
+
+        if (msg.type === 'wrong') {
+          vibrate([80, 30, 80]);
+        }
+
+      } catch(err) {}
+    };
+
+    ws.onclose = () => {
+      connected = false;
+      document.getElementById('status-dot').classList.remove('connected');
+      document.getElementById('status-text').textContent = 'Disconnected — trying to reconnect…';
+      /* Retry after 2 seconds */
+      setTimeout(connect, 2000);
+    };
+
+    ws.onerror = () => {
+      ws.close();
+    };
+
+  } catch(e) {
+    setTimeout(connect, 2000);
+  }
+}
+
+/* =============================================
+   MOTION PERMISSION (iOS 13+)
+   ============================================= */
+function requestMotionPermission() {
+  DeviceOrientationEvent.requestPermission()
+    .then(state => {
+      if (state === 'granted') {
+        document.getElementById('permission-screen').style.display = 'none';
+        showController();
+      } else {
+        alert('Motion permission denied. Please allow motion access in Settings → Safari.');
+      }
+    })
+    .catch(err => {
+      /* Fallback — just show controller */
+      document.getElementById('permission-screen').style.display = 'none';
+      showController();
+    });
+}
+
+function showController() {
+  document.getElementById('controller-screen').style.display = 'flex';
+  startOrientationListener();
+}
+
+/* =============================================
+   DEVICE ORIENTATION (TILT STEERING)
+   gamma = left/right tilt (-90 to 90)
+   beta  = forward/back tilt (-180 to 180)
+   ============================================= */
+let lastSentLane = null;
+let lastSentBrake = null;
+
+function startOrientationListener() {
+  window.addEventListener('deviceorientation', handleOrientation, true);
+}
+
+function handleOrientation(e) {
+  if (!connected || !ws || ws.readyState !== WebSocket.OPEN) return;
+
+  const gamma = e.gamma || 0; /* left/right — negative=left, positive=right */
+  const beta  = e.beta  || 0; /* forward/back */
+  const sens  = parseInt(document.getElementById('sensSlider').value);
+
+  /* Map gamma to lane: -sens*3 to +sens*3 degrees = full range */
+  const threshold = sens * 1.5;
+
+  /* Update tilt ball visualiser */
+  const ball = document.getElementById('tiltBall');
+  const ring = document.getElementById('tiltRing');
+  const rw   = ring.offsetWidth;
+  const maxOff = rw / 2 - 24;
+  const ballX  = Math.max(-maxOff, Math.min(maxOff, (gamma / 45) * maxOff));
+  const ballY  = Math.max(-maxOff, Math.min(maxOff, (beta  / 45) * maxOff * 0.5));
+  ball.style.left = `calc(50% + ${ballX}px)`;
+  ball.style.top  = `calc(50% + ${ballY}px)`;
+
+  /* Determine lane */
+  let lane;
+  if      (gamma < -threshold) lane = 0; /* left  */
+  else if (gamma >  threshold) lane = 2; /* right */
+  else                          lane = 1; /* centre */
+
+  /* Brake: tilt phone forward (beta goes negative) */
+  const isBraking = beta < -20 || braking;
+
+  /* Update action badge */
+  const badge = document.getElementById('actionBadge');
+  if (isBraking) {
+    badge.textContent = '🔴 BRAKING';
+    badge.className   = 'action-badge braking';
+  } else if (lane === 0) {
+    badge.textContent = '◀ STEERING LEFT';
+    badge.className   = 'action-badge left';
+  } else if (lane === 2) {
+    badge.textContent = '▶ STEERING RIGHT';
+    badge.className   = 'action-badge right';
+  } else {
+    badge.textContent = 'STRAIGHT';
+    badge.className   = 'action-badge';
+  }
+
+  /* Only send if changed — avoid flooding */
+  if (lane !== lastSentLane) {
+    lastSentLane = lane;
+    ws.send(JSON.stringify({ type: 'tilt', lane }));
+  }
+  if (isBraking !== lastSentBrake) {
+    lastSentBrake = isBraking;
+    ws.send(JSON.stringify({ type: 'brake', braking: isBraking }));
+  }
+}
+
+/* =============================================
+   BRAKE BUTTON
+   ============================================= */
+function sendBrake(state) {
+  braking = state;
+  const btn = document.getElementById('brakeBtn');
+  btn.classList.toggle('pressed', state);
+  if (connected && ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'brake', braking: state }));
+  }
+}
+
+/* =============================================
+   CRASH FEEDBACK
+   ============================================= */
+function showCrashFeedback() {
+  /* Vibrate pattern: strong-pause-strong */
+  vibrate([200, 100, 400]);
+
+  /* Flash red screen */
+  const overlay = document.getElementById('crash-overlay');
+  overlay.classList.add('show');
+  setTimeout(() => overlay.classList.remove('show'), 800);
+}
+
+function vibrate(pattern) {
+  if (navigator.vibrate) {
+    navigator.vibrate(pattern);
+  }
+}
+
+/* =============================================
+   START
+   ============================================= */
+connect();
+</script>
+</body>
+</html>

@@ -276,8 +276,40 @@
               <strong style="color:var(--accent)">Coach Thabo</strong> — your AI instructor — analyses your mistakes with Claude AI and issues your digital licence card with your photo.
             </p>
           </div>
-        </div>
 
+          <!-- PHONE CONTROLLER PANEL -->
+          <div class="sim-panel" style="margin-top:1rem">
+            <h3>📱 Phone Controller</h3>
+            <div id="qr-status"
+              style="font-size:.75rem;color:var(--muted);margin-bottom:.75rem;line-height:1.5">
+              Scan QR code with your phone to use tilt steering and haptic vibration
+            </div>
+            <div id="qr-wrap" style="text-align:center;margin-bottom:.75rem">
+              <img id="qr-img" src="" alt="QR Code"
+                style="width:130px;height:130px;border-radius:8px;
+                       display:none;background:white;padding:5px;
+                       border:1px solid var(--border)">
+              <div id="qr-loading"
+                style="font-size:.8rem;color:var(--muted);padding:1rem 0">
+                Loading QR code…
+              </div>
+            </div>
+            <div id="controller-status"
+              style="font-size:.75rem;font-weight:600;text-align:center;
+                     padding:.4rem .75rem;border-radius:6px;
+                     background:var(--bg3);border:1px solid var(--border);
+                     color:var(--muted)">
+              📵 No controller connected
+            </div>
+            <div style="margin-top:.6rem;font-size:.7rem;color:var(--muted);
+                        text-align:center;line-height:1.5">
+              Tilt left/right to steer<br>
+              Tilt forward or tap BRAKE to stop<br>
+              Crash = phone vibrates 📳
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -315,7 +347,8 @@
       <h2 class="section-title">👤 My Profile</h2>
       <p class="section-sub">Your South African driver identity card.</p>
       <div class="profile-view-card">
-        <div id="profile-page-content" style="padding:3rem;text-align:center;color:var(--muted)">
+        <div id="profile-page-content"
+          style="padding:3rem;text-align:center;color:var(--muted)">
           Loading…
         </div>
       </div>
@@ -330,8 +363,8 @@
   <div class="end-card">
     <div id="end-emoji" style="font-size:3rem;margin-bottom:.5rem">💥</div>
     <h2 id="end-title"
-        style="font-family:var(--font-head);font-size:1.8rem;
-               text-transform:uppercase;margin-bottom:.25rem">
+      style="font-family:var(--font-head);font-size:1.8rem;
+             text-transform:uppercase;margin-bottom:.25rem">
       Game Over
     </h2>
     <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">
@@ -554,33 +587,23 @@
      ═══════════════════════════════════════════ -->
 <div id="profile-overlay" style="display:none">
   <div class="profile-shell">
-
     <div class="profile-header">
       <div class="ph-badge">🇿🇦 DriveWise ID System</div>
       <h1>Create Your<br><span>Profile</span></h1>
       <p>Set up your driver identity. Your SA ID number is auto-generated from your details.</p>
     </div>
-
     <div class="profile-card">
-
-      <!-- Photo section -->
       <div class="photo-section">
         <h3>📷 Driver Photo</h3>
-
-        <!-- Placeholder shown before any photo is added -->
         <div class="photo-placeholder" id="photo-placeholder" onclick="startCamera()">
           👤
           <small>Tap to open camera</small>
         </div>
-
-        <!-- Camera / captured photo view -->
         <div class="camera-wrap" id="camera-wrap" style="display:none">
           <video id="webcam-video" autoplay playsinline muted></video>
           <img id="captured-photo" alt="Captured photo">
           <div class="camera-ring"></div>
         </div>
-
-        <!-- Photo action buttons -->
         <div class="photo-btns">
           <button class="photo-btn cam-primary" id="btn-start-cam"
                   onclick="startCamera()">
@@ -590,7 +613,6 @@
                   onclick="document.getElementById('photo-upload').click()">
             📁 Upload Photo
           </button>
-          <!-- Hidden file input for upload fallback -->
           <input type="file" id="photo-upload" accept="image/*"
                  style="display:none" onchange="uploadPhoto(event)">
           <button class="photo-btn cam-success" id="btn-capture"
@@ -603,10 +625,7 @@
           </button>
         </div>
       </div>
-
-      <!-- Profile form -->
       <div class="profile-form">
-
         <div class="form-row">
           <div class="form-group">
             <label for="p-firstname">First Name</label>
@@ -619,7 +638,6 @@
                    placeholder="e.g. Nkosi" maxlength="30">
           </div>
         </div>
-
         <div class="form-row">
           <div class="form-group">
             <label for="p-dob">Date of Birth</label>
@@ -636,22 +654,16 @@
             </select>
           </div>
         </div>
-
-        <!-- Live SA ID number preview -->
         <div class="id-preview">
           <div class="id-label">🪪 SA ID Number (auto-generated)</div>
           <div class="id-number" id="id-number-preview" data-raw="">
             __ __ __ __ __ __
           </div>
         </div>
-
-        <!-- Validation error display -->
         <div class="form-error" id="profile-form-error"></div>
-
         <button class="profile-submit" onclick="submitProfile()">
           Create My Profile →
         </button>
-
       </div>
     </div>
   </div>
@@ -659,7 +671,6 @@
 
 <!-- ═══════════════════════════════════════════
      SCRIPTS — load order matters
-     profile.js must load before everything else
      ═══════════════════════════════════════════ -->
 <script src="assets/js/profile.js"></script>
 <script src="assets/js/data.js"></script>
