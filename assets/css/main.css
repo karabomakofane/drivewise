@@ -1,6 +1,9 @@
 /* =============================================
-   DESIGN TOKENS & RESET
+   main.css
+   Design tokens, reset, navigation, shared
+   buttons, shared animations
    ============================================= */
+
 :root {
   --bg:        #0d1117;
   --bg2:       #161b22;
@@ -15,12 +18,18 @@
   --muted:     #8b949e;
   --font-head: 'Barlow Condensed', sans-serif;
   --font-body: 'DM Sans', sans-serif;
-  --r:  10px;
-  --r2: 16px;
+  --r:         10px;
+  --r2:        16px;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 html { scroll-behavior: smooth; }
+
 body {
   font-family: var(--font-body);
   background: var(--bg);
@@ -28,9 +37,10 @@ body {
   overflow-x: hidden;
   line-height: 1.6;
 }
+
 button { cursor: pointer; border: none; font-family: var(--font-body); }
 canvas { display: block; }
-h1,h2,h3,h4 { font-family: var(--font-head); letter-spacing: .02em; }
+h1, h2, h3, h4 { font-family: var(--font-head); letter-spacing: .02em; }
 
 /* =============================================
    NAVIGATION
@@ -41,8 +51,9 @@ nav {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 1.5rem; height: 60px;
+  padding: 0 1.5rem; height: 60px; gap: 1rem;
 }
+
 .nav-logo {
   font-family: var(--font-head);
   font-size: 1.6rem; font-weight: 800;
@@ -50,13 +61,14 @@ nav {
   flex-shrink: 0;
 }
 .nav-logo span { color: var(--text); }
+
 .nav-links {
-  display: flex; gap: .2rem; flex-wrap: wrap;
+  display: flex; gap: .15rem; flex-wrap: wrap; flex: 1;
 }
 .nav-links button {
   background: transparent; color: var(--muted);
-  font-size: .78rem; font-weight: 500;
-  padding: .35rem .7rem; border-radius: 6px;
+  font-size: .76rem; font-weight: 500;
+  padding: .35rem .65rem; border-radius: 6px;
   transition: all .18s; white-space: nowrap;
 }
 .nav-links button:hover,
@@ -101,9 +113,12 @@ nav {
 }
 @keyframes fadeSlide {
   from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 @keyframes tdBounce {
-  0%,80%,100% { transform: translateY(0); opacity: .3; }
-  40%         { transform: translateY(-7px); opacity: 1; }
+  0%, 80%, 100% { transform: translateY(0);   opacity: .3; }
+  40%           { transform: translateY(-7px); opacity: 1;  }
+}
+@keyframes spinSlow {
+  to { transform: rotate(360deg); }
 }

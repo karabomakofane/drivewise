@@ -8,9 +8,11 @@
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/pages.css">
   <link rel="stylesheet" href="assets/css/simulator.css">
+  <link rel="stylesheet" href="assets/css/profile.css">
 </head>
 <body>
 
+<!-- NAVIGATION -->
 <nav>
   <div class="nav-logo">Drive<span>Wise</span></div>
   <div class="nav-links">
@@ -20,10 +22,18 @@
     <button onclick="showPage('lanes')">Lanes</button>
     <button onclick="showPage('simulator')">🎮 Simulator</button>
     <button onclick="showPage('dashboard');renderDashboard();renderLeaderboard()">📊 Dashboard</button>
+    <button onclick="showPage('profile');renderProfilePage()">👤 Profile</button>
+  </div>
+  <div class="nav-profile-chip" id="nav-profile-chip"
+       onclick="showPage('profile');renderProfilePage()">
+    <img class="npc-photo" id="nav-chip-photo" src="" alt="profile">
+    <span class="npc-name" id="nav-chip-name">Driver</span>
   </div>
 </nav>
 
-<!-- HOME -->
+<!-- ═══════════════════════════════════════════
+     HOME PAGE
+     ═══════════════════════════════════════════ -->
 <div id="page-home" class="page visible">
   <div class="hero">
     <div class="hero-badge">🇿🇦 K53 Certified Content</div>
@@ -36,39 +46,76 @@
   </div>
   <div class="container">
     <div class="stats-bar">
-      <div class="stat-item"><div class="num">53+</div><div class="label">Road Signs Covered</div></div>
-      <div class="stat-item"><div class="num">5</div><div class="label">Golden Driving Rules</div></div>
+      <div class="stat-item"><div class="num">53+</div><div class="label">Road Signs</div></div>
+      <div class="stat-item"><div class="num">5</div><div class="label">Environments</div></div>
       <div class="stat-item"><div class="num">3</div><div class="label">Difficulty Levels</div></div>
     </div>
     <h2 class="section-title">5 Golden Driving Rules</h2>
     <p class="section-sub">The fundamental principles every driver must master.</p>
     <div class="rules-grid">
-      <div class="rule-card"><div class="rule-num">01</div><div><h3>Always Check Mirrors</h3><p>Every 5–8 seconds and before every manoeuvre. Know what's around you at all times.</p></div></div>
-      <div class="rule-card"><div class="rule-num">02</div><div><h3>Follow the MSPSL Routine</h3><p>Mirror, Signal, Position, Speed, Look — every time you change direction or merge.</p></div></div>
-      <div class="rule-card"><div class="rule-num">03</div><div><h3>Maintain Safe Following Distance</h3><p>At least a 3-second gap. Double it in rain or poor visibility.</p></div></div>
-      <div class="rule-card"><div class="rule-num">04</div><div><h3>Obey All Road Signs</h3><p>Regulatory signs are legally binding — ignoring them is a criminal offence.</p></div></div>
-      <div class="rule-card"><div class="rule-num">05</div><div><h3>Zero Distractions</h3><p>A 2-second distraction at 60 km/h covers 33 metres completely blind.</p></div></div>
+      <div class="rule-card">
+        <div class="rule-num">01</div>
+        <div><h3>Always Check Mirrors</h3><p>Every 5–8 seconds and before every manoeuvre. Know what is around you at all times.</p></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">02</div>
+        <div><h3>Follow the MSPSL Routine</h3><p>Mirror, Signal, Position, Speed, Look — every time you change direction or merge.</p></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">03</div>
+        <div><h3>Maintain Safe Following Distance</h3><p>At least a 3-second gap. Double it in rain or poor visibility.</p></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">04</div>
+        <div><h3>Obey All Road Signs</h3><p>Regulatory signs are legally binding — ignoring them is a criminal offence.</p></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-num">05</div>
+        <div><h3>Zero Distractions</h3><p>A 2-second distraction at 60 km/h covers 33 metres completely blind.</p></div>
+      </div>
+    </div>
+    <h2 class="section-title">5 Dynamic Environments</h2>
+    <p class="section-sub">Level up to unlock new worlds — the road changes as you drive.</p>
+    <div class="rules-grid">
+      <div class="rule-card"><div class="rule-num">🌳</div><div><h3>Suburban Street</h3><p>Levels 1–2. Green trees, blue skies. The perfect place to start learning.</p></div></div>
+      <div class="rule-card"><div class="rule-num">🏙️</div><div><h3>City Downtown</h3><p>Levels 3–4. Tall buildings, neon windows, busy urban traffic.</p></div></div>
+      <div class="rule-card"><div class="rule-num">🌧️</div><div><h3>Rainy Highway</h3><p>Levels 5–6. Wet roads, rain streaks, fog rolling in.</p></div></div>
+      <div class="rule-card"><div class="rule-num">🌙</div><div><h3>Night Driving</h3><p>Levels 7–8. Dark roads, headlight cones, streetlamps passing by.</p></div></div>
+      <div class="rule-card"><div class="rule-num">🏜️</div><div><h3>Desert Freeway</h3><p>Level 9+. Open road, orange sky, cacti. Only the best reach here.</p></div></div>
     </div>
   </div>
 </div>
 
-<!-- SIGNS -->
+<!-- ═══════════════════════════════════════════
+     ROAD SIGNS PAGE
+     ═══════════════════════════════════════════ -->
 <div id="page-signs" class="page">
   <div class="container">
     <div class="signs-section">
       <h2 class="section-title">Road Signs</h2>
       <p class="section-sub">South African road signs in three categories.</p>
-      <div class="sign-category-title"><div class="cat-dot" style="background:#e05c4b"></div>Warning Signs (Red Triangle)</div>
+      <div class="sign-category-title">
+        <div class="cat-dot" style="background:#e05c4b"></div>
+        Warning Signs (Red Triangle)
+      </div>
       <div class="signs-grid" id="warning-signs"></div>
-      <div class="sign-category-title"><div class="cat-dot" style="background:#f5a623"></div>Regulatory Signs</div>
+      <div class="sign-category-title">
+        <div class="cat-dot" style="background:#f5a623"></div>
+        Regulatory Signs
+      </div>
       <div class="signs-grid" id="regulatory-signs"></div>
-      <div class="sign-category-title"><div class="cat-dot" style="background:#58a6ff"></div>Information Signs</div>
+      <div class="sign-category-title">
+        <div class="cat-dot" style="background:#58a6ff"></div>
+        Information Signs
+      </div>
       <div class="signs-grid" id="info-signs"></div>
     </div>
   </div>
 </div>
 
-<!-- RULES -->
+<!-- ═══════════════════════════════════════════
+     RULES PAGE
+     ═══════════════════════════════════════════ -->
 <div id="page-rules" class="page">
   <div class="container">
     <div class="rules-page-section">
@@ -79,26 +126,69 @@
   </div>
 </div>
 
-<!-- LANES -->
+<!-- ═══════════════════════════════════════════
+     LANE RULES PAGE
+     ═══════════════════════════════════════════ -->
 <div id="page-lanes" class="page">
   <div class="container">
     <div class="lane-page">
       <h2 class="section-title">Lane Rules & MSPSL</h2>
       <p class="section-sub">Proper lane usage and the Mirror–Signal–Position–Speed–Look routine.</p>
       <div class="mspsl-grid">
-        <div class="mspsl-step"><div class="mspsl-icon">🪞</div><div class="mspsl-letter">M</div><h4>Mirror</h4><p>Check interior + exterior mirrors</p></div>
-        <div class="mspsl-step"><div class="mspsl-icon">📢</div><div class="mspsl-letter">S</div><h4>Signal</h4><p>Indicate early enough for others</p></div>
-        <div class="mspsl-step"><div class="mspsl-icon">↔️</div><div class="mspsl-letter">P</div><h4>Position</h4><p>Move to correct lane / position</p></div>
-        <div class="mspsl-step"><div class="mspsl-icon">🐢</div><div class="mspsl-letter">S</div><h4>Speed</h4><p>Adjust speed for the manoeuvre</p></div>
-        <div class="mspsl-step"><div class="mspsl-icon">👁️</div><div class="mspsl-letter">L</div><h4>Look</h4><p>Check blind spots left and right</p></div>
+        <div class="mspsl-step">
+          <div class="mspsl-icon">🪞</div>
+          <div class="mspsl-letter">M</div>
+          <h4>Mirror</h4>
+          <p>Check interior and exterior mirrors</p>
+        </div>
+        <div class="mspsl-step">
+          <div class="mspsl-icon">📢</div>
+          <div class="mspsl-letter">S</div>
+          <h4>Signal</h4>
+          <p>Indicate early enough for others</p>
+        </div>
+        <div class="mspsl-step">
+          <div class="mspsl-icon">↔️</div>
+          <div class="mspsl-letter">P</div>
+          <h4>Position</h4>
+          <p>Move to the correct lane or position</p>
+        </div>
+        <div class="mspsl-step">
+          <div class="mspsl-icon">🐢</div>
+          <div class="mspsl-letter">S</div>
+          <h4>Speed</h4>
+          <p>Adjust speed for the manoeuvre</p>
+        </div>
+        <div class="mspsl-step">
+          <div class="mspsl-icon">👁️</div>
+          <div class="mspsl-letter">L</div>
+          <h4>Look</h4>
+          <p>Check blind spots left and right</p>
+        </div>
       </div>
       <div class="road-diagram">
         <h3>4-Lane Road: Lane Usage Rules</h3>
         <div class="lanes-visual">
-          <div class="lane emergency"><span>🚨</span><div>Emergency Lane</div><div style="font-size:.65rem;color:var(--muted)">Breakdowns only</div></div>
-          <div class="lane slow"><span>🐢</span><div>Lane 1 (Left)</div><div style="font-size:.65rem;color:var(--muted)">Slow / keep left</div></div>
-          <div class="lane fast"><span>🚗</span><div>Lane 2</div><div style="font-size:.65rem;color:var(--muted)">Normal driving</div></div>
-          <div class="lane overtake"><span>⚡</span><div>Lane 3 (Right)</div><div style="font-size:.65rem;color:var(--muted)">Overtaking only</div></div>
+          <div class="lane emergency">
+            <span>🚨</span>
+            <div>Emergency Lane</div>
+            <div style="font-size:.65rem;color:var(--muted)">Breakdowns only</div>
+          </div>
+          <div class="lane slow">
+            <span>🐢</span>
+            <div>Lane 1 (Left)</div>
+            <div style="font-size:.65rem;color:var(--muted)">Slow / keep left</div>
+          </div>
+          <div class="lane fast">
+            <span>🚗</span>
+            <div>Lane 2</div>
+            <div style="font-size:.65rem;color:var(--muted)">Normal driving</div>
+          </div>
+          <div class="lane overtake">
+            <span>⚡</span>
+            <div>Lane 3 (Right)</div>
+            <div style="font-size:.65rem;color:var(--muted)">Overtaking only</div>
+          </div>
         </div>
       </div>
       <div class="rules-accordion" id="lane-accordion"></div>
@@ -106,14 +196,17 @@
   </div>
 </div>
 
-<!-- SIMULATOR -->
+<!-- ═══════════════════════════════════════════
+     SIMULATOR PAGE
+     ═══════════════════════════════════════════ -->
 <div id="page-simulator" class="page">
   <div class="container">
     <div class="sim-page">
       <h2 class="section-title">Driving Simulator</h2>
-      <p class="section-sub">React to road signs. Crash = AI coach + personalised quiz based on YOUR mistakes.</p>
+      <p class="section-sub">React to signs. Level up to unlock new environments. Crash = AI Coach.</p>
       <div class="sim-layout">
 
+        <!-- Left sidebar -->
         <div>
           <div class="sim-panel">
             <h3>📊 Score</h3>
@@ -131,8 +224,19 @@
               <button class="diff-btn" onclick="setDiff('hard',this)">⚡ Hard</button>
             </div>
           </div>
+          <div class="sim-panel" style="margin-top:1rem">
+            <h3>🌍 Environments</h3>
+            <ul class="controls-list">
+              <li>🌳 Lvl 1–2 Suburban</li>
+              <li>🏙️ Lvl 3–4 City</li>
+              <li>🌧️ Lvl 5–6 Rain</li>
+              <li>🌙 Lvl 7–8 Night</li>
+              <li>🏜️ Lvl 9+ Desert</li>
+            </ul>
+          </div>
         </div>
 
+        <!-- Canvas -->
         <div class="canvas-wrap">
           <canvas id="gameCanvas" width="420" height="600"></canvas>
           <div class="feedback-bar" id="feedback-bar">Press Start to begin your journey</div>
@@ -146,6 +250,7 @@
           </div>
         </div>
 
+        <!-- Right sidebar -->
         <div>
           <div class="sim-panel">
             <h3>🎮 Controls</h3>
@@ -168,7 +273,7 @@
           <div class="sim-panel" style="margin-top:1rem">
             <h3>🤖 After Crash</h3>
             <p style="font-size:.8rem;color:var(--muted);line-height:1.6">
-              <strong style="color:var(--accent)">Coach Thabo</strong> — your AI driving instructor — gives personalised feedback powered by Claude AI, then issues your digital licence card.
+              <strong style="color:var(--accent)">Coach Thabo</strong> — your AI instructor — analyses your mistakes with Claude AI and issues your digital licence card with your photo.
             </p>
           </div>
         </div>
@@ -178,7 +283,9 @@
   </div>
 </div>
 
-<!-- DASHBOARD -->
+<!-- ═══════════════════════════════════════════
+     DASHBOARD PAGE
+     ═══════════════════════════════════════════ -->
 <div id="page-dashboard" class="page">
   <div class="container">
     <div class="dash-page">
@@ -199,28 +306,70 @@
   </div>
 </div>
 
-<!-- END GAME OVERLAY -->
+<!-- ═══════════════════════════════════════════
+     PROFILE PAGE
+     ═══════════════════════════════════════════ -->
+<div id="page-profile" class="page">
+  <div class="container">
+    <div class="profile-page">
+      <h2 class="section-title">👤 My Profile</h2>
+      <p class="section-sub">Your South African driver identity card.</p>
+      <div class="profile-view-card">
+        <div id="profile-page-content" style="padding:3rem;text-align:center;color:var(--muted)">
+          Loading…
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     END GAME OVERLAY
+     ═══════════════════════════════════════════ -->
 <div id="end-overlay">
   <div class="end-card">
     <div id="end-emoji" style="font-size:3rem;margin-bottom:.5rem">💥</div>
-    <h2 id="end-title" style="font-family:var(--font-head);font-size:1.8rem;text-transform:uppercase;margin-bottom:.25rem">Game Over</h2>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">Your performance report</p>
+    <h2 id="end-title"
+        style="font-family:var(--font-head);font-size:1.8rem;
+               text-transform:uppercase;margin-bottom:.25rem">
+      Game Over
+    </h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">
+      Your performance report
+    </p>
     <div class="grade-display" id="grade-display">B</div>
     <div class="report-grid">
-      <div class="report-item"><div class="r-val" id="final-score">0</div><div class="r-key">Final Score</div></div>
-      <div class="report-item"><div class="r-val" id="final-streak">0</div><div class="r-key">Best Streak</div></div>
-      <div class="report-item"><div class="r-val" id="final-react">—</div><div class="r-key">Avg React (ms)</div></div>
-      <div class="report-item"><div class="r-val" id="final-level">1</div><div class="r-key">Level Reached</div></div>
+      <div class="report-item">
+        <div class="r-val" id="final-score">0</div>
+        <div class="r-key">Final Score</div>
+      </div>
+      <div class="report-item">
+        <div class="r-val" id="final-streak">0</div>
+        <div class="r-key">Best Streak</div>
+      </div>
+      <div class="report-item">
+        <div class="r-val" id="final-react">—</div>
+        <div class="r-key">Avg React (ms)</div>
+      </div>
+      <div class="report-item">
+        <div class="r-val" id="final-level">1</div>
+        <div class="r-key">Level Reached</div>
+      </div>
     </div>
     <div class="overlay-btns">
-      <button class="btn btn-primary" onclick="document.getElementById('end-overlay').classList.remove('show');showAICoach()">🧑🏾‍🏫 AI Coach →</button>
+      <button class="btn btn-primary"
+        onclick="document.getElementById('end-overlay').classList.remove('show');showAICoach()">
+        🧑🏾‍🏫 AI Coach →
+      </button>
       <button class="btn btn-outline" onclick="goToQuiz()">📚 Quiz</button>
       <button class="btn btn-outline" onclick="skipQuiz()">✕ Close</button>
     </div>
   </div>
 </div>
 
-<!-- AI COACH OVERLAY -->
+<!-- ═══════════════════════════════════════════
+     AI COACH OVERLAY
+     ═══════════════════════════════════════════ -->
 <div class="ai-coach-overlay" id="coach-overlay">
   <div class="coach-card">
     <div class="coach-header">
@@ -231,15 +380,29 @@
       </div>
     </div>
     <div class="coach-stats-bar">
-      <div class="coach-stat"><div class="cs-val" id="cs-score">0</div><div class="cs-key">Score</div></div>
-      <div class="coach-stat"><div class="cs-val" id="cs-streak">0</div><div class="cs-key">Streak</div></div>
-      <div class="coach-stat"><div class="cs-val" id="cs-react">—</div><div class="cs-key">Reaction</div></div>
-      <div class="coach-stat"><div class="cs-val" id="cs-grade">—</div><div class="cs-key">Grade</div></div>
+      <div class="coach-stat">
+        <div class="cs-val" id="cs-score">0</div>
+        <div class="cs-key">Score</div>
+      </div>
+      <div class="coach-stat">
+        <div class="cs-val" id="cs-streak">0</div>
+        <div class="cs-key">Streak</div>
+      </div>
+      <div class="coach-stat">
+        <div class="cs-val" id="cs-react">—</div>
+        <div class="cs-key">Reaction</div>
+      </div>
+      <div class="coach-stat">
+        <div class="cs-val" id="cs-grade">—</div>
+        <div class="cs-key">Grade</div>
+      </div>
     </div>
     <div class="coach-body">
       <div class="coach-thinking" id="coach-thinking">
         <span>Coach Thabo is analysing your drive</span>
-        <div class="thinking-dots"><span></span><span></span><span></span></div>
+        <div class="thinking-dots">
+          <span></span><span></span><span></span>
+        </div>
       </div>
       <div class="coach-message" id="coach-msg"></div>
       <div class="coach-badges" id="coach-badges"></div>
@@ -252,7 +415,9 @@
   </div>
 </div>
 
-<!-- LICENCE CARD OVERLAY -->
+<!-- ═══════════════════════════════════════════
+     LICENCE CARD OVERLAY
+     ═══════════════════════════════════════════ -->
 <div class="licence-overlay" id="licence-overlay">
   <div class="licence-wrap">
     <h2>🪪 Your Driver Licence Card</h2>
@@ -266,15 +431,54 @@
         <div class="lc-grade-badge" id="lc-grade">A</div>
       </div>
       <div class="lc-divider"></div>
-      <div class="lc-grid">
-        <div class="lc-field"><div class="lf-label">Score</div><div class="lf-value" id="lc-score">0</div></div>
-        <div class="lc-field"><div class="lf-label">Reaction</div><div class="lf-value" id="lc-react">—</div></div>
-        <div class="lc-field"><div class="lf-label">Level</div><div class="lf-value" id="lc-level">1</div></div>
-        <div class="lc-field"><div class="lf-label">Best Streak</div><div class="lf-value" id="lc-streak">0</div></div>
-        <div class="lc-field"><div class="lf-label">Date Issued</div><div class="lf-value" id="lc-date">—</div></div>
-        <div class="lc-field"><div class="lf-label">Status</div><div class="lf-value"><div class="licence-status" id="lc-status">—</div></div></div>
+      <div style="display:flex;gap:1rem;align-items:flex-start;
+                  margin-bottom:.85rem;position:relative">
+        <div class="lc-photo-wrap" id="lc-photo-wrap">
+          <img id="lc-photo" src="" alt="Driver">
+        </div>
+        <div style="flex:1">
+          <div style="font-size:.58rem;color:rgba(245,166,35,.6);
+                      text-transform:uppercase;letter-spacing:.1em;
+                      margin-bottom:.2rem">Driver</div>
+          <div style="font-family:var(--font-head);font-size:.95rem;
+                      font-weight:800;color:white;text-transform:uppercase;
+                      margin-bottom:.6rem;line-height:1.2"
+               id="lc-name">—</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+            <div class="lc-field">
+              <div class="lf-label">Score</div>
+              <div class="lf-value" id="lc-score">0</div>
+            </div>
+            <div class="lc-field">
+              <div class="lf-label">Reaction</div>
+              <div class="lf-value" id="lc-react">—</div>
+            </div>
+            <div class="lc-field">
+              <div class="lf-label">Level</div>
+              <div class="lf-value" id="lc-level">1</div>
+            </div>
+            <div class="lc-field">
+              <div class="lf-label">Streak</div>
+              <div class="lf-value" id="lc-streak">0</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="lc-bottom">
+      <div class="lc-divider"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  position:relative;margin-top:.6rem">
+        <div>
+          <div style="font-size:.55rem;color:rgba(245,166,35,.5);
+                      text-transform:uppercase;letter-spacing:.1em">
+            Date Issued
+          </div>
+          <div style="font-family:var(--font-head);font-size:.95rem;
+                      font-weight:700;color:white"
+               id="lc-date">—</div>
+        </div>
+        <div class="licence-status" id="lc-status">—</div>
+      </div>
+      <div class="lc-bottom" style="margin-top:.5rem">
         <div class="lc-uid" id="lc-id">DW-XXXXXX</div>
       </div>
     </div>
@@ -286,7 +490,9 @@
   </div>
 </div>
 
-<!-- CRASH QUIZ OVERLAY -->
+<!-- ═══════════════════════════════════════════
+     CRASH QUIZ OVERLAY
+     ═══════════════════════════════════════════ -->
 <div id="quiz-overlay">
   <div class="quiz-shell">
     <div class="crash-banner">
@@ -309,7 +515,9 @@
       </div>
     </div>
     <div class="quiz-section" id="quiz-section">
-      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="q-prog" style="width:0%"></div></div>
+      <div class="quiz-prog-bar">
+        <div class="quiz-prog-fill" id="q-prog" style="width:0%"></div>
+      </div>
       <div class="quiz-meta">
         <span class="quiz-q-num" id="q-num">Question 1 of 3</span>
         <span class="quiz-score-badge" id="q-badge">0 / 0 correct</span>
@@ -318,12 +526,17 @@
       <div class="quiz-sign-preview" id="q-preview"></div>
       <div class="quiz-options" id="q-opts"></div>
       <div class="quiz-exp" id="q-exp"></div>
-      <button class="quiz-next-btn" id="q-next" onclick="nextQ()">Next Question →</button>
+      <button class="quiz-next-btn" id="q-next" onclick="nextQ()">
+        Next Question →
+      </button>
     </div>
     <div class="quiz-results" id="quiz-results">
-      <div class="qr-ring" id="qr-ring"><span id="qr-score">3/3</span><small>QUIZ</small></div>
+      <div class="qr-ring" id="qr-ring">
+        <span id="qr-score">3/3</span>
+        <small>QUIZ</small>
+      </div>
       <div class="qr-title" id="qr-title">Quiz Passed!</div>
-      <div class="qr-sub" id="qr-sub">Great job.</div>
+      <div class="qr-sub"   id="qr-sub">Great job.</div>
       <div class="qr-missed" id="qr-missed" style="display:none">
         <h4>📌 Review these signs:</h4>
         <div id="qr-missed-items"></div>
@@ -336,7 +549,119 @@
   </div>
 </div>
 
-<!-- SCRIPTS: order matters — data → pages → game → quiz → coach → main -->
+<!-- ═══════════════════════════════════════════
+     PROFILE CREATION OVERLAY
+     ═══════════════════════════════════════════ -->
+<div id="profile-overlay" style="display:none">
+  <div class="profile-shell">
+
+    <div class="profile-header">
+      <div class="ph-badge">🇿🇦 DriveWise ID System</div>
+      <h1>Create Your<br><span>Profile</span></h1>
+      <p>Set up your driver identity. Your SA ID number is auto-generated from your details.</p>
+    </div>
+
+    <div class="profile-card">
+
+      <!-- Photo section -->
+      <div class="photo-section">
+        <h3>📷 Driver Photo</h3>
+
+        <!-- Placeholder shown before any photo is added -->
+        <div class="photo-placeholder" id="photo-placeholder" onclick="startCamera()">
+          👤
+          <small>Tap to open camera</small>
+        </div>
+
+        <!-- Camera / captured photo view -->
+        <div class="camera-wrap" id="camera-wrap" style="display:none">
+          <video id="webcam-video" autoplay playsinline muted></video>
+          <img id="captured-photo" alt="Captured photo">
+          <div class="camera-ring"></div>
+        </div>
+
+        <!-- Photo action buttons -->
+        <div class="photo-btns">
+          <button class="photo-btn cam-primary" id="btn-start-cam"
+                  onclick="startCamera()">
+            📷 Open Camera
+          </button>
+          <button class="photo-btn"
+                  onclick="document.getElementById('photo-upload').click()">
+            📁 Upload Photo
+          </button>
+          <!-- Hidden file input for upload fallback -->
+          <input type="file" id="photo-upload" accept="image/*"
+                 style="display:none" onchange="uploadPhoto(event)">
+          <button class="photo-btn cam-success" id="btn-capture"
+                  onclick="capturePhoto()" style="display:none">
+            ✅ Take Photo
+          </button>
+          <button class="photo-btn" id="btn-retake"
+                  onclick="retakePhoto()" style="display:none">
+            🔄 Retake
+          </button>
+        </div>
+      </div>
+
+      <!-- Profile form -->
+      <div class="profile-form">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="p-firstname">First Name</label>
+            <input type="text" id="p-firstname"
+                   placeholder="e.g. Thabo" maxlength="30">
+          </div>
+          <div class="form-group">
+            <label for="p-lastname">Surname</label>
+            <input type="text" id="p-lastname"
+                   placeholder="e.g. Nkosi" maxlength="30">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="p-dob">Date of Birth</label>
+            <input type="date" id="p-dob"
+                   onchange="updateIDPreview()"
+                   max="2009-01-01" min="1924-01-01">
+          </div>
+          <div class="form-group">
+            <label for="p-gender">Gender</label>
+            <select id="p-gender" onchange="updateIDPreview()">
+              <option value="">Select gender</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Live SA ID number preview -->
+        <div class="id-preview">
+          <div class="id-label">🪪 SA ID Number (auto-generated)</div>
+          <div class="id-number" id="id-number-preview" data-raw="">
+            __ __ __ __ __ __
+          </div>
+        </div>
+
+        <!-- Validation error display -->
+        <div class="form-error" id="profile-form-error"></div>
+
+        <button class="profile-submit" onclick="submitProfile()">
+          Create My Profile →
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS — load order matters
+     profile.js must load before everything else
+     ═══════════════════════════════════════════ -->
+<script src="assets/js/profile.js"></script>
 <script src="assets/js/data.js"></script>
 <script src="assets/js/pages.js"></script>
 <script src="assets/js/game.js"></script>
